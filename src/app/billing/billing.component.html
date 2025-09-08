@@ -1,0 +1,141 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">🧾 Billing</h2>
+
+  <div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-primary" (click)="openBillingModal(billingModal)">➕ New Bill</button>
+    <button class="btn btn-secondary" (click)="downloadAllBillsReport()">📄 Download All Bills</button>
+    <button class="btn btn-warning" (click)="clearBillsTable()">🧹 Clear Table</button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Bill No</th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Mobile</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bill of tempBills">
+          <td>{{ bill.BILL_NO }}</td>
+          <td>{{ bill.PRODUCTNAME }}</td>
+          <td>{{ bill.CATEGORY }}</td>
+          <td>{{ bill.PRICE }}</td>
+          <td>{{ bill.QUANTITY }}</td>
+          <td>{{ bill.TOTAL_PRICE }}</td>
+          <td>{{ bill.BILL_DATE | date:'dd-MM-yyyy' }}</td>
+          <td>{{ getCustomerName(bill.CUSTOMER_ID) }}</td>
+          <td>{{ getCustomerMobile(bill.CUSTOMER_ID) }}</td>
+        </tr>
+        <tr *ngIf="tempBills.length === 0">
+          <td colspan="9" class="text-center">No bills found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Billing Modal -->
+<ng-template #billingModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">➕ Add New Bill</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row g-3">
+      <!-- Customer selection -->
+      <div class="col-md-12 d-flex align-items-center gap-2 mb-2">
+        <select class="form-select" [(ngModel)]="selectedCustomer">
+          <option [ngValue]="null">-- Select Customer --</option>
+          <option *ngFor="let c of customers" [ngValue]="c">{{ c.name }} ({{ c.mobile }})</option>
+        </select>
+        <button class="btn btn-outline-primary" (click)="openCustomerModal(customerModal)">➕ Add Customer</button>
+      </div>
+
+      <!-- Employee selection -->
+      <div class="col-md-12 mb-2">
+        <select class="form-select" [(ngModel)]="selectedEmployee">
+          <option [ngValue]="null">-- Select Employee --</option>
+          <option *ngFor="let e of employees" [ngValue]="e">{{ e.NAME }}</option>
+        </select>
+      </div>
+
+      <!-- Product selection -->
+      <div class="col-md-6">
+        <label class="form-label">Product</label>
+        <select class="form-select" [(ngModel)]="selectedProduct" (ngModelChange)="onProductSelect($event)">
+          <option [ngValue]="null">-- Select Product --</option>
+          <option *ngFor="let p of products" [ngValue]="p">{{ p.PRODUCTNAME }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Product ID</label>
+        <input class="form-control" readonly [value]="currentBill.PRODUCT ?? ''" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Category</label>
+        <input class="form-control" readonly [(ngModel)]="currentBill.CATEGORY" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Price</label>
+        <input type="number" class="form-control" [(ngModel)]="currentBill.PRICE" (ngModelChange)="updateTotal()" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Quantity</label>
+        <input type="number" class="form-control" [(ngModel)]="currentBill.QUANTITY" (ngModelChange)="updateTotal()" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Total Price</label>
+        <input class="form-control" readonly [(ngModel)]="currentBill.TOTAL_PRICE" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Bill Date</label>
+        <input type="date" class="form-control" [(ngModel)]="currentBill.BILL_DATE" />
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success" (click)="saveBill()">💾 Save</button>
+    <button class="btn btn-warning" (click)="clearCurrentBill()">🧹 Clear All</button>
+    <button class="btn btn-secondary" (click)="modal.close()">❌ Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Customer Modal -->
+<ng-template #customerModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">➕ Add New Customer</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.close()"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-2">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" #custName />
+    </div>
+    <div class="mb-2">
+      <label class="form-label">Mobile</label>
+      <input type="text" class="form-control" #custMobile />
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" (click)="addCustomer(custName.value, custMobile.value, modal)">💾 Add</button>
+    <button class="btn btn-secondary" (click)="modal.close()">❌ Cancel</button>
+  </div>
+</ng-template>

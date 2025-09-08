@@ -1,0 +1,143 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">📦 Item Entries</h2>
+
+  <!-- Button to open modal -->
+  <button class="btn btn-primary mb-3" (click)="openModal()">➕ New Item Entry</button>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Order ID</th>
+          <th>Supplier</th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Ordered Qty</th>
+          <th>Received Qty</th>
+          <th>Pending Qty</th>
+          <th>Received Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of itemOrders">
+          <td>{{ item.ORDERID }}</td>
+          <td>{{ item.SUPPLIER_NAME }}</td>
+          <td>{{ item.PRODUCTNAME }}</td>
+          <td>{{ item.CATEGORY }}</td>
+          <td>{{ item.QUANTITY_REQUIRED }}</td>
+          <td>{{ item.RECEIVED_QUANTITY }}</td>
+          <td>{{ item.PENDING_QUANTITY }}</td>
+          <td>{{ item.RECEIVED_DATE }}</td>
+        </tr>
+        <tr *ngIf="itemOrders.length === 0">
+          <td colspan="8" class="text-center">No item entries found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">➕ Add Item Entry</h5>
+        <button type="button" class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Supplier -->
+        <div class="mb-3">
+          <label class="form-label">Supplier</label>
+          <select class="form-select"
+                  [(ngModel)]="currentItem.SUPPLIER_ID"
+                  (change)="onSupplierChange(currentItem.SUPPLIER_ID)"
+                  name="supplierSelect">
+            <option value="">-- Select Supplier --</option>
+            <option *ngFor="let s of suppliers" [value]="s.SUPPLIER_ID">{{ s.NAME }}</option>
+          </select>
+        </div>
+
+        <!-- Product -->
+        <div class="mb-3">
+          <label class="form-label">Product</label>
+          <select class="form-select"
+                  [(ngModel)]="currentItem.PRODUCTNAME"
+                  (change)="onProductChange(currentItem.PRODUCTNAME)"
+                  name="productSelect"
+                  [disabled]="supplierProducts.length === 0">
+            <option value="">-- Select Product --</option>
+            <option *ngFor="let p of supplierProducts" [value]="p.PRODUCTNAME">{{ p.PRODUCTNAME }}</option>
+          </select>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Order ID</label>
+            <input class="form-control" readonly [(ngModel)]="currentItem.ORDERID" name="orderId" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Ordered Qty</label>
+            <input class="form-control" readonly [(ngModel)]="currentItem.QUANTITY_REQUIRED" name="orderedQty" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Pending Qty</label>
+            <input class="form-control" readonly [(ngModel)]="currentItem.PENDING_QUANTITY" name="pendingQty" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Received Quantity</label>
+            <input type="number" min="0" class="form-control"
+                   [(ngModel)]="currentItem.RECEIVED_QUANTITY"
+                   (ngModelChange)="updatePending()"
+                   name="receivedQty" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Received Date</label>
+            <input type="date" class="form-control" [(ngModel)]="currentItem.RECEIVED_DATE" name="receivedDate" />
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label">Category</label>
+            <input class="form-control text-uppercase" readonly [(ngModel)]="currentItem.CATEGORY" name="category" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="save()">💾 Save</button>
+        <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+  <div
+    class="toast align-items-center text-bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    [class.show]="showToast"
+  >
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Stock Updated!
+      </div>
+      <button
+        type="button"
+        class="btn-close btn-close-white me-2 m-auto"
+        (click)="hideToast()"
+      ></button>
+    </div>
+  </div>
+</div>

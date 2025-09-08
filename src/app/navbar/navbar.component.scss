@@ -1,0 +1,11 @@
+.navbar-nav .nav-link {
+    font-size: 0.9rem; /* slightly smaller to fit */
+    margin-right: 10px; /* reduce spacing */
+    white-space: nowrap; /* prevent wrapping */
+  }
+  .navbar-nav .nav-link.text-danger {
+    font-weight: bold;
+  }
+  .navbar {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }

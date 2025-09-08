@@ -1,0 +1,143 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">👤 Employee Details</h2>
+  <button class="btn btn-primary mb-3" (click)="openModal()">➕ New Employee</button>
+
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Address</th>
+          <th>DOB</th>
+          <th>Age</th>
+          <th>DOJ</th>
+          <th>Gender</th>
+          <th>Email</th>
+          <th>Qualification</th>
+          <th>Designation</th>
+          <th>Basic Pay</th>
+          <th>Incentive</th>
+          <th>Net Pay</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let e of employees">
+          <td>{{ e.EMPLOYEE_ID || '-' }}</td>
+          <td>{{ e.NAME }}</td>
+          <td>{{ e.MOBILE_NO }}</td>
+          <td>{{ e.ADDRESS }}</td>
+          <td>{{ e.DOB }}</td>
+          <td>{{ e.AGE }}</td>
+          <td>{{ e.DOJ }}</td>
+          <td>{{ e.GENDER }}</td>
+          <td>{{ e.EMAIL_ID }}</td>
+          <td>{{ e.QUALIFICATION }}</td>
+          <td>{{ e.DESIGNATION }}</td>
+          <td>{{ e.BASIC_PAY }}</td>
+          <td>{{ e.INCENTIVE }}</td>
+          <td>{{ e.NET_PAY }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-1" (click)="openModal(e)">✏️ Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteEmployee(e)">🗑️ Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="employees.length === 0">
+          <td colspan="15" class="text-center">No employees found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditMode ? '✏️ Edit Employee' : '➕ Add Employee' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Name</label>
+            <input class="form-control" [(ngModel)]="employee.NAME" name="NAME" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Mobile</label>
+            <input class="form-control" [(ngModel)]="employee.MOBILE_NO" name="MOBILE_NO" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Address</label>
+            <input class="form-control" [(ngModel)]="employee.ADDRESS" name="ADDRESS" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">DOB</label>
+            <input type="date" class="form-control" [(ngModel)]="employee.DOB" name="DOB" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Age</label>
+            <input type="number" class="form-control" [(ngModel)]="employee.AGE" name="AGE" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">DOJ</label>
+            <input type="date" class="form-control" [(ngModel)]="employee.DOJ" name="DOJ" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Gender</label>
+            <input class="form-control" [(ngModel)]="employee.GENDER" name="GENDER" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Email</label>
+            <input class="form-control" [(ngModel)]="employee.EMAIL_ID" name="EMAIL_ID" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Qualification</label>
+            <input class="form-control" [(ngModel)]="employee.QUALIFICATION" name="QUALIFICATION" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Designation</label>
+            <input class="form-control" [(ngModel)]="employee.DESIGNATION" name="DESIGNATION" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Basic Pay</label>
+            <input type="number" class="form-control" [(ngModel)]="employee.BASIC_PAY" name="BASIC_PAY" (ngModelChange)="updateNetPay()" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Incentive</label>
+            <input type="number" class="form-control" [(ngModel)]="employee.INCENTIVE" name="INCENTIVE" (ngModelChange)="updateNetPay()" />
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Net Pay</label>
+            <input class="form-control" [value]="employee.NET_PAY" readonly name="NET_PAY" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="saveEmployee()">💾 Save</button>
+        <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

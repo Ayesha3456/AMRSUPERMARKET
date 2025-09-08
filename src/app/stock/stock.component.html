@@ -1,0 +1,62 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">📦 Stock Details</h2>
+
+  <!-- Category Filter Buttons -->
+  <div class="mb-3">
+    <span class="me-2">Filter by Category:</span>
+    <button 
+      *ngFor="let cat of uniqueCategories" 
+      class="btn btn-outline-primary btn-sm me-2 mb-2"
+      [class.active]="filterCategory === cat"
+      (click)="filterCategory = cat; applyFilters()">
+      {{ cat }}
+    </button>
+    <button 
+      class="btn btn-outline-secondary btn-sm mb-2"
+      (click)="clearCategoryFilter()">
+      All
+    </button>
+  </div>
+
+  <!-- Product Name Search -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Search Product Name"
+             [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()">
+    </div>
+  </div>
+
+  <!-- Stock Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Category</th>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>Brand Name</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of filteredStocks">
+          <td>{{ s.CATEGORY }}</td>
+          <td>{{ s.PRODUCT }}</td>
+          <td>{{ s.PRODUCTNAME }}</td>
+          <td>{{ s.BRANDNAME }}</td>
+          <td>{{ s.STOCK }}</td>
+        </tr>
+        <tr *ngIf="filteredStocks.length === 0">
+          <td colspan="5" class="text-center py-3">No stock found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Back Button -->
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-secondary" (click)="back()">⬅ Back</button>
+  </div>
+</div>

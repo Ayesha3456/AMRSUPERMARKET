@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">📦 Supplier Entries</h2>
+
+  <!-- Message -->
+  <div *ngIf="message" class="alert alert-info text-center">{{ message }}</div>
+
+  <!-- Add Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary" (click)="openAddModal(addEditModal)">➕ New Supplier</button>
+  </div>
+
+  <!-- Supplier Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Mobile</th>
+          <th>Email</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of suppliers">
+          <td>{{ s.SUPPLIER_ID }}</td>
+          <td>{{ s.NAME }}</td>
+          <td>{{ s.COMPANY_NAME }}</td>
+          <td>{{ s.MOBILE_NO }}</td>
+          <td>{{ s.EMAIL_ID }}</td>
+          <td>{{ s.CATEGORY }}</td>
+          <td>
+            <button class="btn btn-sm btn-success me-1" (click)="openEditModal(addEditModal, s)">✏ Edit</button>
+            <button class="btn btn-sm btn-secondary" (click)="deleteSupplier(s.SUPPLIER_ID)">❌ Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="suppliers.length === 0">
+          <td colspan="7" class="text-center py-3">No suppliers found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #addEditModal let-modal>
+  <div class="modal-backdrop"></div>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ editing ? '✏ Edit Supplier' : '➕ Add Supplier' }}</h5>
+          <button type="button" class="btn-close" (click)="cancel()">×</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Supplier ID</label>
+              <input class="form-control" [(ngModel)]="supplier.SUPPLIER_ID" name="supplierId" readonly />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Name</label>
+              <input class="form-control" [(ngModel)]="supplier.NAME" (ngModelChange)="supplier.NAME = $event.toUpperCase()" name="name" required />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Company</label>
+              <input class="form-control" [(ngModel)]="supplier.COMPANY_NAME" (ngModelChange)="supplier.COMPANY_NAME = $event.toUpperCase()" name="company" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Mobile</label>
+              <input class="form-control" [(ngModel)]="supplier.MOBILE_NO" name="mobile" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Email</label>
+              <input class="form-control" [(ngModel)]="supplier.EMAIL_ID" name="email" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Category</label>
+              <input class="form-control" [(ngModel)]="supplier.CATEGORY" (ngModelChange)="supplier.CATEGORY = $event.toUpperCase()" name="category" />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-success" (click)="saveSupplier()">💾 Save</button>
+          <button class="btn btn-secondary" (click)="cancel()">❌ Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

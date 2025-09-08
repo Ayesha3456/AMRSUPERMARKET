@@ -1,0 +1,22 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">📄 Reports</h4>
+    </div>
+    <div class="card-body">
+      <p class="text-muted">Click a button to download the report:</p>
+      <div class="row g-3">
+        <div class="col-md-4 col-sm-6" *ngFor="let report of reports">
+          <button class="btn btn-outline-primary w-100 py-3" (click)="report.action()">
+            {{ report.label }}
+          </button>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button class="btn btn-secondary px-4" routerLink="/home">⬅ Back</button>
+      </div>
+    </div>
+  </div>
+</div>

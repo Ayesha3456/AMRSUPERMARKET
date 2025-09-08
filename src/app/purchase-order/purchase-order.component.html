@@ -1,0 +1,105 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">📦 Purchase Orders</h2>
+
+  <!-- Button to open modal -->
+  <button class="btn btn-primary mb-3" (click)="openModal()">➕ Add Order</button>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>Order ID</th>
+          <th>Category</th>
+          <th>Supplier ID</th>
+          <th>Supplier Name</th>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Quantity Required</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of orders; let i = index">
+          <td>{{ o.ORDERID || '' }}</td>
+          <td>{{ o.CATEGORY }}</td>
+          <td>{{ o.SUPPLIER_ID }}</td>
+          <td>{{ o.SUPPLIER_NAME }}</td>
+          <td>{{ o.PRODUCTNAME }}</td>
+          <td>{{ o.PRICE | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>{{ o.QUANTITY_REQUIRED }}</td>
+          <td>{{ o.TOTAL_PRICE | currency:'INR':'symbol':'1.2-2' }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="editOrder(o, i)">✏ Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteOrder(i)">🗑 Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="orders.length === 0">
+          <td colspan="9" class="text-center">No purchase orders found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ editingIndex !== null ? "✏ Edit Order" : "➕ Add Order" }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select class="form-select" [(ngModel)]="order.CATEGORY" name="CATEGORY">
+              <option value="">-- Select Category --</option>
+              <option *ngFor="let c of categories" [value]="c.category">{{ c.category }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Supplier Name</label>
+            <select class="form-select" [(ngModel)]="order.SUPPLIER_NAME" name="SUPPLIER_NAME" 
+              (change)="onSupplierChange(order.SUPPLIER_NAME)">
+              <option value="">-- Select Supplier --</option>
+              <option *ngFor="let s of suppliers" [value]="s.NAME">{{ s.NAME }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Supplier ID</label>
+            <input class="form-control" [(ngModel)]="order.SUPPLIER_ID" name="SUPPLIER_ID" readonly>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Product Name</label>
+            <input class="form-control" [(ngModel)]="order.PRODUCTNAME" name="PRODUCTNAME" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Price</label>
+            <input type="number" class="form-control" [(ngModel)]="order.PRICE" name="PRICE" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Quantity Required</label>
+            <input type="number" class="form-control" [(ngModel)]="order.QUANTITY_REQUIRED" name="QUANTITY_REQUIRED" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Total</label>
+            <input class="form-control" [value]="(order.PRICE || 0) * (order.QUANTITY_REQUIRED || 0)" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="save()">💾 Save</button>
+        <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

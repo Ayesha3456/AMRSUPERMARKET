@@ -1,0 +1,87 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">👥 Customers</h2>
+  <button class="btn btn-primary mb-3" (click)="openModal()">➕ New Customer</button>
+
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Mobile</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>Town</th>
+          <th>Pincode</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of customers">
+          <td>{{ c.CUSTOMER_ID }}</td>
+          <td>{{ c.NAME }}</td>
+          <td>{{ c.MOBILE_NO }}</td>
+          <td>{{ c.ADDRESS || '-' }}</td>
+          <td>{{ c.CITY || '-' }}</td>
+          <td>{{ c.TOWN || '-' }}</td>
+          <td>{{ c.PINCODE || '-' }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-1" (click)="openModal(c)">✏️ Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteCustomer(c)">🗑️ Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="customers.length === 0">
+          <td colspan="8" class="text-center">No customers found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditMode ? '✏️ Edit Customer' : '➕ Add Customer' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="mb-2">
+          <label class="form-label">Name</label>
+          <input class="form-control" [(ngModel)]="customer.NAME" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Mobile</label>
+          <input class="form-control" [(ngModel)]="customer.MOBILE_NO" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Address</label>
+          <input class="form-control" [(ngModel)]="customer.ADDRESS" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">City</label>
+          <input class="form-control" [(ngModel)]="customer.CITY" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Town</label>
+          <input class="form-control" [(ngModel)]="customer.TOWN" />
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Pincode</label>
+          <input class="form-control" [(ngModel)]="customer.PINCODE" type="number" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="saveCustomer()">💾 Save</button>
+        <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

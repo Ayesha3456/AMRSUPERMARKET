@@ -1,0 +1,94 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2 class="mb-3">📦 Product Entries</h2>
+
+  <!-- Button to open modal -->
+  <button class="btn btn-primary mb-3" (click)="openModal()">➕ New Product</button>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered mt-2">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Category</th>
+          <th>Product Name</th>
+          <th>Brand Name</th>
+          <th>Stock</th>
+          <th>MRP</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredProducts; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ p.CATEGORY }}</td>
+          <td>{{ p.PRODUCTNAME }}</td>
+          <td>{{ p.BRANDNAME }}</td>
+          <td>{{ p.STOCK }}</td>
+          <td>{{ p.MRP }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-1" (click)="openEditModal(p)">✏️ Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteProduct(p)">🗑️ Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProducts.length === 0">
+          <td colspan="7" class="text-center">No products found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<!-- Add / Edit Modal -->
+<div class="modal" *ngIf="isModalOpen" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ selectedProduct ? '✏️ Edit Product' : '➕ Add Product' }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select class="form-select" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone:true}">
+              <option value="">-- Select Category --</option>
+              <option *ngFor="let category of categories" [value]="category.category">{{ category.category }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Product Name</label>
+            <input type="text" class="form-control" required [(ngModel)]="productName" 
+                   [ngModelOptions]="{standalone:true}" (input)="productName = productName.toUpperCase()" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Brand Name</label>
+            <input type="text" class="form-control" required [(ngModel)]="brandName" [ngModelOptions]="{standalone:true}" />
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">Stock</label>
+            <input type="number" class="form-control" required [(ngModel)]="stock" [ngModelOptions]="{standalone:true}" />
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label">MRP</label>
+            <input type="number" step="0.01" class="form-control" required [(ngModel)]="mrp" [ngModelOptions]="{standalone:true}" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-success" (click)="selectedProduct ? updateProduct() : saveProducts()">💾 Save</button>
+        <button class="btn btn-secondary" (click)="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
