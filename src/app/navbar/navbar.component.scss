@@ -1,11 +1,20 @@
+.navbar {
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 100%;
+  overflow-x: auto; /* if still too long, scroll only navbar */
+  white-space: nowrap; /* keep items in one line */
+}
+
+.navbar-nav {
+  flex-wrap: nowrap; /* prevent wrapping */
+}
+
 .navbar-nav .nav-link {
-    font-size: 0.9rem; /* slightly smaller to fit */
-    margin-right: 10px; /* reduce spacing */
-    white-space: nowrap; /* prevent wrapping */
-  }
-  .navbar-nav .nav-link.text-danger {
-    font-weight: bold;
-  }
-  .navbar {
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  }
+  font-size: 0.8rem;   /* smaller text */
+  padding: 6px 10px;   /* tighter spacing */
+  margin-right: 4px;   /* less gap between items */
+}
+
+.navbar-nav .nav-link.text-danger {
+  font-weight: bold;
+}
