@@ -16,7 +16,7 @@ export interface PurchaseOrder {
 
 @Injectable({ providedIn: 'root' })
 export class PurchaseOrderService {
-  private apiUrl = 'http://localhost:8000/api/purchaseorder/';
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/purchaseorder/';
 
   constructor(private http: HttpClient) {}
 

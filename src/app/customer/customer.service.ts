@@ -14,7 +14,7 @@ export interface Customer {
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-  private apiUrl = 'http://localhost:8000/api/customer/';
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/customer/';
 
   constructor(private http: HttpClient) {}
 

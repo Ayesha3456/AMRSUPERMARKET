@@ -15,7 +15,7 @@ export interface Stock {
 
 @Injectable({ providedIn: 'root' })
 export class StockService {
-  private apiUrl = 'http://localhost:8000/api/stock/';
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/stock/';
   private refreshSubject = new Subject<void>();
   refresh$ = this.refreshSubject.asObservable();
 

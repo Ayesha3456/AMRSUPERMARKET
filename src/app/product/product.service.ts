@@ -15,7 +15,7 @@ export interface Product {
   providedIn: 'root',
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8000/api/product/'; // Django REST API endpoint
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/product/'; // Django REST API endpoint
 
   constructor(private http: HttpClient) {}
 

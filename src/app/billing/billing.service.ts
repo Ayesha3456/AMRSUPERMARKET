@@ -62,7 +62,7 @@ export interface Billing {
   providedIn: 'root'
 })
 export class BillingService {
-  private apiUrl = 'http://localhost:8000/api'; // Backend API base URL
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api'; // Backend API base URL
 
   constructor(private http: HttpClient) {}
 

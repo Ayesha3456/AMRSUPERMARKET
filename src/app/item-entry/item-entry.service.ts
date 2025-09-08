@@ -18,7 +18,7 @@ export interface ItemEntry {
 
 @Injectable({ providedIn: 'root' })
 export class ItemEntryService {
-  private apiUrl = 'http://localhost:8000/api/itementry/';
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/itementry/';
 
   constructor(private http: HttpClient) {}
 

@@ -24,7 +24,7 @@ export interface Employee {
 })
 export class EmployeeService {
 
-  private apiUrl = 'http://localhost:8000/api/employee/';
+  private apiUrl = 'https://amrsupermarketbackend.onrender.com/api/employee/';
 
   constructor(private http: HttpClient) { }
 
